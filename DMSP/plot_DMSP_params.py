@@ -6,16 +6,17 @@ import matplotlib.axes
 import datetime
 from matplotlib import dates
 import numpy as np
-from matplotlib import rc
+# from matplotlib import rc
 from matplotlib.ticker import (MultipleLocator, FormatStrFormatter, AutoMinorLocator)
 
-rc('font',**{'family':'serif','serif':['Times']})
-rc('text', usetex=True)
+# having issues with mpl and fonts
+# rc('font',**{'family':'serif','serif':['Times']})
+# rc('text', usetex=True)
 
 with open(sys.argv[1], 'r') as data_in: # opening file, making it a Python object
     file_name = sys.argv[1] 
     lines = data_in.readlines() # making the contents a list of strings
-    time_range1 = range(56161,57242) # time of interest; CHANGE MANUALLY
+    time_range1 = range(7801,8402) # time of interest; CHANGE MANUALLY
     diff_B_perp = [] # initializing lists for loop
     hor_ion_v = []
     glat_vals = []
@@ -47,16 +48,18 @@ with open(sys.argv[1], 'r') as data_in: # opening file, making it a Python objec
     
     axs[0].plot(times,diff_B_perp,linewidth=0.75,color='k')
     axs[0].tick_params(which='both',direction='inout')
-    axs[0].tick_params(which='major',length=8)
-    axs[0].tick_params(which='minor',length=4)
+    axs[0].tick_params(which='major',length=8,right=True)
+    axs[0].tick_params(which='minor',length=4,right=True)
     axs[0].tick_params(which='major',labelsize=8)
     axs[1].yaxis.set_minor_locator(AutoMinorLocator())
+    axs[0].autoscale(axis='x',tight=True)
 
     axs[1].plot(times,hor_ion_v,linewidth=0.75,color='k')    
     axs[1].tick_params(which='both',direction='inout')
-    axs[1].tick_params(which='major',length=8)
-    axs[1].tick_params(which='minor',length=4)
+    axs[1].tick_params(which='major',length=8,right=True)
+    axs[1].tick_params(which='minor',length=4,right=True)
     axs[1].tick_params(which='major',labelsize=8)
+    axs[1].autoscale(axis='x',tight=True)
 
     axs[1].xaxis.set_major_locator(dates.MinuteLocator())
     axs[1].set_xticklabels(time_labels)
@@ -67,13 +70,13 @@ with open(sys.argv[1], 'r') as data_in: # opening file, making it a Python objec
     # ax1.yaxis.set_major_formatter(FormatStrFormatter('%d'))
     # ax1.yaxis.set_minor_locator(MultipleLocator(5))
     
-    axs[1].text(-0.15,-0.225, 'UT\nGDLAT\nGLON',transform=axs[1].transAxes,fontsize=8,bbox={'facecolor':'white', 'edgecolor':'none', 'alpha':0.5,'pad':10})
+    axs[1].text(-0.15,-0.18, 'UT\nGDLAT\nGLON',transform=axs[1].transAxes,fontsize=8,bbox={'facecolor':'white', 'edgecolor':'none', 'alpha':0.5,'pad':10})
     date = file_name[4:12]
     satellite = file_name[13:15]
     plt.suptitle('DMSP, {}, F{}'.format(date,satellite))
     plt.autoscale(axis='x',tight=True)
-    axs[0].set_ylabel(R'Difference of $B_{perp}$ (\textit{T})',fontsize=10)
-    axs[1].set_ylabel(R'Horizontal ion velocity (\textit{m/s})',fontsize=10)
-    plt.savefig(file_name[:-15] + '_2027-2045.png') # must manually change time range for name of png
+    axs[0].set_ylabel(R'Difference of $B_{perp}$ (T)',fontsize=10)
+    axs[1].set_ylabel(R'Horizontal ion velocity (m/s)',fontsize=10)
+    plt.savefig(file_name[:-15] + '_0210-0220.png') # must manually change time range for name of png
     # plt.tight_layout()
     plt.show()
